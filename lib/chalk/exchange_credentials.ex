@@ -28,28 +28,28 @@ defmodule Chalk.Client.ExchangeCredentials do
             token_type: String.t(),
             expires_in: integer(),
             expires_at: integer(),
-            api_server: DateTime,
+            api_server: String.t(),
             engines: [{String.t(), String.t()}]
-    }
+          }
 
     def valid?(%__MODULE__{} = token) do
-      token.expires_at >= (DateTime.utc_now() |> DateTime.add(5, :minute))
+      {:ok, exp, _} = DateTime.from_iso8601(token.expires_at)
+      exp >= DateTime.utc_now() |> DateTime.add(5, :minute)
     end
   end
 
   def exchange_credentials(params, config \\ %{}) do
+    config = config |> Map.put(:unauthenticated, true)
     c = config[:client] || Chalk
 
     Request
-    |> struct(method: :post, endpoint: "oauth/token", body: params)
+    |> struct(method: :post, endpoint: "v1/oauth/token", body: params)
     |> Request.add_metadata(config)
     |> c.send_request(Client.new(config))
     |> c.handle_response(&map_exchange_credentials(&1))
   end
 
   defp map_exchange_credentials(body) do
-    Poison.Decode.transform(body, %{as: %Token{
-
-                                    }})
+    Poison.Decode.transform(body, %{as: %Token{}})
   end
 end

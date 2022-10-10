@@ -32,7 +32,7 @@ defmodule Chalk.Query do
   ```
   """
   def online(params, config \\ %{}) do
-    request_operation("query/online", params, config)
+    request_operation("v1/query/online", params, config)
   end
 
   defp request_operation(endpoint, params, config) do

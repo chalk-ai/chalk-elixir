@@ -2,7 +2,7 @@ defmodule Chalk.Client do
   @spec new(map) :: Tesla.Client.t()
 
   defp get_base_url(config) do
-    config[:api_server] || "https://api.chalk.ai/v1/"
+    config[:api_server] || "https://api.chalk.ai/"
   end
 
   defp get_metadata(config) do
@@ -19,12 +19,35 @@ defmodule Chalk.Client do
     case config[:middleware] || [] do
       middleware when is_list(middleware) ->
         middleware
+
       m ->
         [m]
     end
   end
 
+  defp get_client_id(config) do
+    Map.get(config, "client_id", System.get_env("CHALK_CLIENT_ID"))
+  end
+
+  defp get_client_secret(config) do
+    Map.get(config, "client_secret", System.get_env("CHALK_CLIENT_SECRET"))
+  end
+
   def new(config \\ %{}) do
+    authentication_middleware =
+      if not Map.get(config, :unauthenticated, false) do
+        [
+          {Chalk.Tesla.CredentialsMiddleware,
+           %{
+             client_id: get_client_id(config),
+             client_secret: get_client_secret(config),
+             api_server: get_base_url(config)
+           }}
+        ]
+      else
+        []
+      end
+
     middleware =
       [
         {Tesla.Middleware.BaseUrl, get_base_url(config)},
@@ -32,12 +55,10 @@ defmodule Chalk.Client do
          [
            {"Content-Type", "application/json"},
            {"user-agent", "chalk-elixir"}
-           # {"CLIENT-ID", get_client_id(config)},
-           # {"SECRET", get_secret(config)}
          ]},
         Tesla.Middleware.JSON,
         {Tesla.Middleware.Telemetry, get_metadata(config)}
-      ] ++ get_middleware(config)
+      ] ++ authentication_middleware ++ get_middleware(config)
 
     adapter = {get_adapter(config), get_http_options(config)}
 
@@ -59,7 +80,6 @@ defmodule Chalk.Client do
     @moduledoc """
     Data structure for an HTTP request with convenience functions.
     """
-
 
     defstruct body: %{}, endpoint: nil, method: nil, opts: %{}
     @type t :: %__MODULE__{body: map, endpoint: String.t(), method: atom, opts: map}

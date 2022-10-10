@@ -86,13 +86,13 @@ defmodule ChalkTest do
                    client_secret: System.get_env("CHALK_CLIENT_SECRET"),
                    grant_type: "client_credentials"
                  },
-                 %{api_server: "http://localhost:8000/v1"}
+                 %{api_server: "http://localhost:8000"}
                )
     end
   end
 
   describe "Chalk Query" do
-    test "can roundtrip a query for an additional feature" do
+    test "can roundtrip a query for an input feature" do
       assert 1 ==
                Chalk.Query.online(
                  %{
@@ -103,7 +103,7 @@ defmodule ChalkTest do
                      "user.id"
                    ]
                  },
-                 %{api_server: "http://localhost:8000/v1"}
+                 %{api_server: "http://localhost:8000"}
                )
     end
 
@@ -119,7 +119,7 @@ defmodule ChalkTest do
                      "user.full_name"
                    ]
                  },
-                 %{api_server: "http://localhost:8000/v1"}
+                 %{api_server: "http://localhost:8000"}
                )
     end
   end
