@@ -78,13 +78,46 @@ defmodule ChalkTest do
   end
 
   describe "Chalk ExchangeCredentials" do
-    test "does it" do
+    test "exchanges a valid client id and secret for an access token" do
       assert 1 ==
                Chalk.Client.ExchangeCredentials.exchange_credentials(
                  %{
                    client_id: System.get_env("CHALK_CLIENT_ID"),
                    client_secret: System.get_env("CHALK_CLIENT_SECRET"),
                    grant_type: "client_credentials"
+                 },
+                 %{api_server: "http://localhost:8000/v1"}
+               )
+    end
+  end
+
+  describe "Chalk Query" do
+    test "can roundtrip a query for an additional feature" do
+      assert 1 ==
+               Chalk.Query.online(
+                 %{
+                   inputs: %{
+                     "user.id": "user_id"
+                   },
+                   outputs: [
+                     "user.id"
+                   ]
+                 },
+                 %{api_server: "http://localhost:8000/v1"}
+               )
+    end
+
+    test "can roundtrip a query for an additional feature" do
+      assert 1 ==
+               Chalk.Query.online(
+                 %{
+                   inputs: %{
+                     "user.id": "u_f4uN7hF7L5"
+                   },
+                   outputs: [
+                     "user.id",
+                     "user.full_name"
+                   ]
                  },
                  %{api_server: "http://localhost:8000/v1"}
                )

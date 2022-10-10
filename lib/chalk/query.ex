@@ -10,6 +10,7 @@ defmodule Chalk.Query do
           }
   end
 
+
   defmodule OnlineQueryResponse do
     @derive Jason.Encoder
     defstruct data: [],
@@ -41,7 +42,10 @@ defmodule Chalk.Query do
     |> struct(method: :post, endpoint: endpoint, body: params)
     |> Request.add_metadata(config)
     |> c.send_request(Client.new(config))
+    |> c.handle_response(&map_query_response(&1))
+  end
 
-    # |> c.handle_response(&map_link(&1))
+  defp map_query_response(body) do
+    Poison.Decode.transform(body, %{as: %OnlineQueryResponse{}})
   end
 end
