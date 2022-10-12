@@ -34,7 +34,7 @@ defmodule Chalk.Client.ExchangeCredentials do
 
     def valid?(%__MODULE__{} = token) do
       {:ok, exp, _} = DateTime.from_iso8601(token.expires_at)
-      exp >= DateTime.utc_now() |> DateTime.add(5, :minute)
+      exp >= DateTime.utc_now() |> DateTime.add(5 * 60, :second)
     end
   end
 

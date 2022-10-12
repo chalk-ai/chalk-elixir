@@ -1,15 +1,46 @@
 defmodule Chalk.Query do
   alias Chalk.Client
   alias Chalk.Client.Request
+  alias Chalk.Common.ChalkError
+  alias Chalk.Common.ChalkException
 
-  defmodule FeatureValue do
-    defstruct x: nil
+  defmodule FeatureMeta do
+    defstruct chosen_resolver_fqn: nil,
+              cache_hit: nil
 
     @type t :: %__MODULE__{
-            x: String.t()
+            chosen_resolver_fqn: String.t(),
+            cache_hit: boolean()
           }
   end
 
+  defmodule FeatureResult do
+    defstruct error: nil,
+              field: nil,
+              meta: nil,
+              ts: nil,
+              value: nil
+
+    @type t :: %__MODULE__{
+            error: ChalkError.t(),
+            field: String.t(),
+            meta: FeatureMeta.t(),
+            ts: String.t(),
+            value: any()
+          }
+  end
+
+  defmodule QueryMeta do
+    defstruct execution_duration_s: nil,
+              deployment_id: nil,
+              query_id: nil
+
+    @type t :: %__MODULE__{
+            execution_duration_s: float(),
+            deployment_id: String.t(),
+            query_id: String.t()
+          }
+  end
 
   defmodule OnlineQueryResponse do
     @derive Jason.Encoder
@@ -46,6 +77,19 @@ defmodule Chalk.Query do
   end
 
   defp map_query_response(body) do
-    Poison.Decode.transform(body, %{as: %OnlineQueryResponse{}})
+    Poison.Decode.transform(body, %{
+      as: %OnlineQueryResponse{
+        data: [
+          %FeatureResult{
+            error: %ChalkError{
+              exception: %ChalkException{}
+            },
+            meta: %FeatureMeta{}
+          }
+        ],
+        errors: [%ChalkError{}],
+        meta: [%QueryMeta{}]
+      }
+    })
   end
 end
