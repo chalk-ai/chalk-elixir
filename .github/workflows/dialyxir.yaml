@@ -7,7 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  Dialyxir:
+    runs-on: ubuntu-latest
     steps:
       - name: Set up Elixir
         id: beam
