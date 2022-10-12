@@ -7,13 +7,16 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  Dialyxir:
+    runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
       - name: Set up Elixir
         id: beam
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.12.3" # Define the elixir version
+          elixir-version: "1.13.4" # Define the elixir version
           otp-version: "24.1" # Define the OTP version
       # Don't cache PLTs based on mix.lock hash, as Dialyzer can incrementally update even old ones
       # Cache key based on Elixir & Erlang version (also useful when running in matrix)
@@ -28,6 +31,9 @@ jobs:
           path: |
             priv/plts
      # Create PLTs if no cache was found
+      - name: Fetch dependencies
+        run: mix deps.get
+
       - name: Create PLTs
         if: steps.plt_cache.outputs.cache-hit != 'true'
         run: mix dialyzer --plt
