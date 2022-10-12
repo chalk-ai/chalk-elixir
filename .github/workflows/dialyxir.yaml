@@ -10,6 +10,8 @@ jobs:
   Dialyxir:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
       - name: Set up Elixir
         id: beam
         uses: erlef/setup-beam@v1
