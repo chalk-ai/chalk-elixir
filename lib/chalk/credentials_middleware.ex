@@ -10,8 +10,6 @@ defmodule Chalk.Tesla.CredentialsMiddleware do
       grant_type: "client_credentials"
     }
 
-    IO.inspect(params)
-
     result =
       Chalk.Client.ExchangeCredentials.exchange_credentials(params, %{
         api_server: options[:api_server]
