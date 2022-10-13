@@ -50,6 +50,6 @@ defmodule Chalk.Client.ExchangeCredentials do
   end
 
   defp map_exchange_credentials(body) do
-    Poison.Decode.transform(body, %{as: %Token{}})
+    Poison.Decode.decode(body, %{as: %Token{}})
   end
 end

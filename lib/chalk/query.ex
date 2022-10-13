@@ -77,7 +77,7 @@ defmodule Chalk.Query do
   end
 
   defp map_query_response(body) do
-    Poison.Decode.transform(body, %{
+    Poison.Decode.decode(body, %{
       as: %OnlineQueryResponse{
         data: [
           %FeatureResult{
