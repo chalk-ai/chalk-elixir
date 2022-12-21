@@ -16,9 +16,19 @@ defmodule Chalk.Tesla.CredentialsMiddleware do
       })
 
     case result do
-      {:ok, token} ->
+      {:ok, token_response} ->
+        headers = [
+          {"Authorization", "Bearer #{token_response.access_token}"},
+        ]
+
+        # If the client_id and client_secret we're using are pegged to a specific environment,
+        # roundtrip this as a hint to the load balancer
+        if token_response.primary_environment != nil do
+          headers = [headers | {"X-Chalk-Env-Id", token_response.primary_environment}]
+        end
+
         env
-        |> Tesla.put_headers([{"Authorization", "Bearer #{token.access_token}"}])
+        |> Tesla.put_headers(headers)
         |> Tesla.run(next)
 
       {:error, detail} ->
