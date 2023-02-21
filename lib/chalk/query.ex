@@ -34,11 +34,13 @@ defmodule Chalk.Query do
     defstruct execution_duration_s: nil,
               deployment_id: nil,
               query_id: nil
+              query_timestamp: nil
 
     @type t :: %__MODULE__{
             execution_duration_s: float(),
             deployment_id: String.t(),
-            query_id: String.t()
+            query_id: String.t(),
+            query_timestamp: String.t()
           }
   end
 
@@ -88,7 +90,7 @@ defmodule Chalk.Query do
           }
         ],
         errors: [%ChalkError{}],
-        meta: [%QueryMeta{}]
+        meta: %QueryMeta{}
       }
     })
   end
