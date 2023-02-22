@@ -33,7 +33,7 @@ defmodule Chalk.Query do
   defmodule QueryMeta do
     defstruct execution_duration_s: nil,
               deployment_id: nil,
-              query_id: nil
+              query_id: nil,
               query_timestamp: nil
 
     @type t :: %__MODULE__{
