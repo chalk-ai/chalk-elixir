@@ -81,6 +81,7 @@ defmodule Chalk.Client do
     Data structure for an HTTP request with convenience functions.
     """
 
+    @derive Jason.Encoder
     defstruct body: %{}, endpoint: nil, method: nil, opts: %{}
     @type t :: %__MODULE__{body: map, endpoint: String.t(), method: atom, opts: map}
 

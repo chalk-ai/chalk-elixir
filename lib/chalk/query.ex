@@ -5,6 +5,7 @@ defmodule Chalk.Query do
   alias Chalk.Common.ChalkException
 
   defmodule FeatureMeta do
+    @derive Jason.Encoder
     defstruct chosen_resolver_fqn: nil,
               cache_hit: nil
 
@@ -15,6 +16,7 @@ defmodule Chalk.Query do
   end
 
   defmodule FeatureResult do
+    @derive Jason.Encoder
     defstruct error: nil,
               field: nil,
               meta: nil,
@@ -31,6 +33,7 @@ defmodule Chalk.Query do
   end
 
   defmodule QueryMeta do
+    @derive Jason.Encoder
     defstruct execution_duration_s: nil,
               deployment_id: nil,
               query_id: nil,
