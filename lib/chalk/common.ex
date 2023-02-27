@@ -10,6 +10,7 @@ defmodule Chalk.Common do
   end
 
   defmodule ChalkError do
+    @derive Jason.Encoder
     defstruct code: nil, category: nil, message: nil, exception: nil, feature: nil, resolver: nil
 
     @type t :: %__MODULE__{
