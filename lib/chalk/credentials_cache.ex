@@ -36,7 +36,7 @@ defmodule Chalk.Client.CredentialsCache do
   defp get_access_token(config) do
     params = %{
       client_id: "",
-      client_secret: "",
+      client_secret: ""
     }
 
     res = Chalk.Client.ExchangeCredentials.exchange_credentials(params, config)
