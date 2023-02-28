@@ -54,7 +54,7 @@ defmodule Chalk.Client do
         {Tesla.Middleware.Headers,
          [
            {"Content-Type", "application/json"},
-           {"user-agent", "chalk-elixir"}
+           {"user-agent", "chalk-elixir v0.0.4"}
          ]},
         Tesla.Middleware.JSON
         # {Tesla.Middleware.Telemetry, get_metadata(config)}
