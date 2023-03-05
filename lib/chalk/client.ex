@@ -5,16 +5,6 @@ defmodule Chalk.Client do
     config[:api_server] || "https://api.chalk.ai/"
   end
 
-  defp get_metadata(config) do
-    default_metadata = %{
-      service: :chalk
-    }
-
-    metadata = Map.merge(default_metadata, config[:telemetry_metadata] || %{})
-
-    %{metadata: metadata}
-  end
-
   defp get_middleware(config) do
     case config[:middleware] || [] do
       middleware when is_list(middleware) ->
@@ -54,7 +44,7 @@ defmodule Chalk.Client do
         {Tesla.Middleware.Headers,
          [
            {"Content-Type", "application/json"},
-           {"user-agent", "chalk-elixir v0.0.4"}
+           {"user-agent", "chalk-elixir v0.0.6"}
          ]},
         Tesla.Middleware.JSON
         # {Tesla.Middleware.Telemetry, get_metadata(config)}

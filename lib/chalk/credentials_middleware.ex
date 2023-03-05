@@ -18,7 +18,11 @@ defmodule Chalk.Tesla.CredentialsMiddleware do
     case result do
       {:ok, token} ->
         env
-        |> Tesla.put_headers([{"Authorization", "Bearer #{token.access_token}"}])
+        |> Tesla.put_headers(Enum.filter([
+              {"Authorization", "Bearer #{token.access_token}"},
+            if is_nil(token.primary_environment), do: {"X-Chalk-Env-Id", "Bearer #{token.access_token}"}, else: nil,
+            ], & !is_nil(&1))
+        )
         |> Tesla.run(next)
 
       {:error, detail} ->
