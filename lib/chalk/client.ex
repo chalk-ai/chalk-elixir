@@ -1,5 +1,5 @@
 defmodule Chalk.Client do
-  @version Application.spec(:chalk_elixir, :vsn)
+  @version Chalk.Mixfile.project()[:version]
 
   @spec new(map) :: Tesla.Client.t()
   def new(config \\ %{}) do
