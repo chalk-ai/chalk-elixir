@@ -14,6 +14,10 @@ defmodule Chalk.Client do
 
   # HELPERS
 
+  defp get_base_url(config) do
+    config[:api_server] || "https://api.chalk.ai/"
+  end
+
   defp get_base_middleware(config) do
     [
       {Tesla.Middleware.BaseUrl, get_base_url(config)},
@@ -42,10 +46,6 @@ defmodule Chalk.Client do
     else
       []
     end
-  end
-
-  defp get_base_url(config) do
-    config[:api_server] || "https://api.chalk.ai/"
   end
 
   defp get_middleware(config) do
