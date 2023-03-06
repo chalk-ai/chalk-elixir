@@ -27,7 +27,9 @@ defmodule Chalk.Client do
   end
 
   defp get_authentication_middleware(config) do
-    unless Map.get(config, :unauthenticated, false) do
+    unauthenticated? = Map.get(config, :unauthenticated, false)
+
+    unless unauthenticated? do
       [
         {Chalk.Tesla.CredentialsMiddleware,
          %{
