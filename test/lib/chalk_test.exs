@@ -8,6 +8,26 @@ defmodule ChalkTest do
 
   defmodule Result, do: defstruct([:some])
 
+  describe "Client" do
+    test "has correct setup" do
+      %Tesla.Client{pre: pre} = Client.new()
+
+      {"user-agent", user_agent} =
+        pre
+        |> Enum.find(fn
+          {Tesla.Middleware.Headers, :call, _} -> true
+          _ -> false
+        end)
+        |> then(fn {_, _, [headers]} -> headers end)
+        |> Enum.find(fn
+          {"user-agent", _} -> true
+          _ -> false
+        end)
+
+      assert user_agent =~ Chalk.Mixfile.project()[:version]
+    end
+  end
+
   describe "Chalk send_request/2" do
     setup do
       bypass = Bypass.open()
