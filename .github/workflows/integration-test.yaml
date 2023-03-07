@@ -1,4 +1,4 @@
-name: Dialyxir
+name: Integration tests
 
 on: [push, pull_request]
 
