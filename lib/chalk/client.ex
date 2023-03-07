@@ -19,13 +19,22 @@ defmodule Chalk.Client do
   end
 
   defp get_base_middleware(config) do
+    deployment_id_header =
+      case get_deployment_id(config) do
+        id when not is_nil(id) ->
+          [{"x-chalk-preview-deployment", id}]
+
+        _ ->
+          []
+      end
+
     [
       {Tesla.Middleware.BaseUrl, get_base_url(config)},
       {Tesla.Middleware.Headers,
        [
          {"Content-Type", "application/json"},
          {"user-agent", "chalk-elixir v#{@version}"}
-       ]},
+       | deployment_id_header] },
       Tesla.Middleware.JSON
     ]
   end

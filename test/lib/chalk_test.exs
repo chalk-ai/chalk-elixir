@@ -9,7 +9,7 @@ defmodule ChalkTest do
   defmodule Result, do: defstruct([:some])
 
   describe "Client" do
-    test "has correct setup" do
+    test "has correct user agent" do
       %Tesla.Client{pre: pre} = Client.new()
 
       {"user-agent", user_agent} =
