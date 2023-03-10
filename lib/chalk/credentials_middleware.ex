@@ -1,4 +1,6 @@
 defmodule Chalk.Tesla.CredentialsMiddleware do
+  alias Chalk.Common.ChalkCredentialsError
+
   @behaviour Tesla.Middleware
 
   @impl Tesla.Middleware
@@ -16,18 +18,30 @@ defmodule Chalk.Tesla.CredentialsMiddleware do
       })
 
     case result do
-      {:ok, token} ->
+      {:ok, %{access_token: access_token, primary_environment: primary_environment}} ->
+        headers =
+          [
+            {"Authorization", "Bearer #{access_token}"}
+          ] ++
+            if primary_environment != nil do
+              [{"X-Chalk-Env-Id", primary_environment}]
+            else
+              []
+            end
+
         env
-        |> Tesla.put_headers(Enum.filter([
-              {"Authorization", "Bearer #{token.access_token}"},
-            (if !is_nil(token.primary_environment), do: {"X-Chalk-Env-Id", token.primary_environment}, else: nil)
-            ], & !is_nil(&1))
-        )
+        |> Tesla.put_headers(headers)
         |> Tesla.run(next)
 
-      {:error, detail} ->
-        IO.inspect(detail)
-        Tesla.run(env, next)
+      {:error, %{"detail" => detail, "trace" => trace}} ->
+        {:current_stacktrace, stacktrace} = Process.info(self(), :current_stacktrace)
+
+        {:error,
+         %ChalkCredentialsError{
+           detail: detail,
+           trace: trace,
+           stacktrace: inspect(stacktrace)
+         }}
     end
   end
 end
