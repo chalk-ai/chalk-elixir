@@ -22,7 +22,6 @@ defmodule Chalk.Tesla.CredentialsMiddleware do
         |> Tesla.run(next)
 
       {:error, detail} ->
-        IO.inspect(detail)
         Tesla.run(env, next)
     end
   end
