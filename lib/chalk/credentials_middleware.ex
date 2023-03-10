@@ -1,4 +1,6 @@
 defmodule Chalk.Tesla.CredentialsMiddleware do
+  alias Chalk.Common.ChalkCredentialsError
+
   @behaviour Tesla.Middleware
 
   @impl Tesla.Middleware
@@ -16,13 +18,20 @@ defmodule Chalk.Tesla.CredentialsMiddleware do
       })
 
     case result do
-      {:ok, token} ->
+      {:ok, %{access_token: access_token}} ->
         env
-        |> Tesla.put_headers([{"Authorization", "Bearer #{token.access_token}"}])
+        |> Tesla.put_headers([{"Authorization", "Bearer #{access_token}"}])
         |> Tesla.run(next)
 
-      {:error, detail} ->
-        Tesla.run(env, next)
+      {:error, %{"detail" => detail, "trace" => trace}} ->
+        {:current_stacktrace, stacktrace} = Process.info(self(), :current_stacktrace)
+
+        {:error,
+         %ChalkCredentialsError{
+           detail: detail,
+           trace: trace,
+           stacktrace: inspect(stacktrace)
+         }}
     end
   end
 end

@@ -22,4 +22,15 @@ defmodule Chalk.Common do
             resolver: String.t()
           }
   end
+
+  defmodule ChalkCredentialsError do
+    @derive Jason.Encoder
+    defstruct detail: nil, trace: nil, stacktrace: nil
+
+    @type t :: %__MODULE__{
+            detail: String.t(),
+            trace: String.t(),
+            stacktrace: String.t()
+          }
+  end
 end
