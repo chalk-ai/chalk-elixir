@@ -17,6 +17,7 @@ defmodule Chalk.Client.ExchangeCredentials do
     @derive Jason.Encoder
     # @enforce_keys [:access_token, :expires_in, :expires_at]
     defstruct access_token: nil,
+              primary_environment: nil,
               token_type: nil,
               expires_in: nil,
               expires_at: nil,
@@ -26,6 +27,7 @@ defmodule Chalk.Client.ExchangeCredentials do
     @type t :: %__MODULE__{
             access_token: String.t(),
             token_type: String.t(),
+            primary_environment: String.t(),
             expires_in: integer(),
             expires_at: integer(),
             api_server: String.t(),

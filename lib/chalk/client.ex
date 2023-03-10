@@ -1,8 +1,60 @@
 defmodule Chalk.Client do
+  @version Chalk.Mixfile.project()[:version]
+
   @spec new(map) :: Tesla.Client.t()
+  def new(config \\ %{}) do
+    middleware =
+      get_base_middleware(config) ++
+        get_authentication_middleware(config) ++ get_middleware(config)
+
+    adapter = {get_adapter(config), get_http_options(config)}
+
+    Tesla.client(middleware, adapter)
+  end
+
+  # HELPERS
 
   defp get_base_url(config) do
     config[:api_server] || "https://api.chalk.ai/"
+  end
+
+  defp get_base_middleware(config) do
+    deployment_id_header =
+      case get_deployment_id(config) do
+        id when not is_nil(id) ->
+          [{"x-chalk-preview-deployment", id}]
+
+        _ ->
+          []
+      end
+
+    [
+      {Tesla.Middleware.BaseUrl, get_base_url(config)},
+      {Tesla.Middleware.Headers,
+       [
+         {"Content-Type", "application/json"},
+         {"user-agent", "chalk-elixir v#{@version}"}
+       | deployment_id_header] },
+      Tesla.Middleware.JSON
+    ]
+  end
+
+  defp get_authentication_middleware(config) do
+    unauthenticated? = Map.get(config, :unauthenticated, false)
+
+    unless unauthenticated? do
+      [
+        {Chalk.Tesla.CredentialsMiddleware,
+         %{
+           client_id: get_client_id(config),
+           client_secret: get_client_secret(config),
+           api_server: get_base_url(config),
+           deployment_id: get_deployment_id(config)
+         }}
+      ]
+    else
+      []
+    end
   end
 
   defp get_middleware(config) do
@@ -23,35 +75,8 @@ defmodule Chalk.Client do
     Map.get(config, "client_secret", System.get_env("CHALK_CLIENT_SECRET"))
   end
 
-  def new(config \\ %{}) do
-    authentication_middleware =
-      if not Map.get(config, :unauthenticated, false) do
-        [
-          {Chalk.Tesla.CredentialsMiddleware,
-           %{
-             client_id: get_client_id(config),
-             client_secret: get_client_secret(config),
-             api_server: get_base_url(config)
-           }}
-        ]
-      else
-        []
-      end
-
-    middleware =
-      [
-        {Tesla.Middleware.BaseUrl, get_base_url(config)},
-        {Tesla.Middleware.Headers,
-         [
-           {"Content-Type", "application/json"},
-           {"user-agent", "chalk-elixir v0.0.4"}
-         ]},
-        Tesla.Middleware.JSON
-      ] ++ authentication_middleware ++ get_middleware(config)
-
-    adapter = {get_adapter(config), get_http_options(config)}
-
-    Tesla.client(middleware, adapter)
+  defp get_deployment_id(config) do
+    Map.get(config, "deployment_id", System.get_env("DEPLOYMENT_ID"))
   end
 
   defp get_adapter(config) do

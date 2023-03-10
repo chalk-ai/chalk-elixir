@@ -13,7 +13,7 @@ jobs:
         uses: erlef/setup-beam@v1
         with:
           elixir-version: "1.13.4" # Define the elixir version
-          otp-version: "24.1" # Define the OTP version
+          otp-version: "24.2" # Define the OTP version
       # Don't cache PLTs based on mix.lock hash, as Dialyzer can incrementally update even old ones
       # Cache key based on Elixir & Erlang version (also useful when running in matrix)
       - name: Restore PLT cache
