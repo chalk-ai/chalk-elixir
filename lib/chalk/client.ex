@@ -34,7 +34,8 @@ defmodule Chalk.Client do
        [
          {"Content-Type", "application/json"},
          {"user-agent", "chalk-elixir v#{@version}"}
-       | deployment_id_header] },
+         | deployment_id_header
+       ]},
       Tesla.Middleware.JSON
     ]
   end

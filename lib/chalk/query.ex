@@ -6,12 +6,16 @@ defmodule Chalk.Query do
 
   defmodule FeatureMeta do
     @derive Jason.Encoder
-    defstruct chosen_resolver_fqn: nil,
-              cache_hit: nil
+    defstruct cache_hit: nil,
+              chosen_resolver_fqn: nil,
+              primitive_type: nil,
+              version: nil
 
     @type t :: %__MODULE__{
+            cache_hit: boolean(),
             chosen_resolver_fqn: String.t(),
-            cache_hit: boolean()
+            primitive_type: String.t(),
+            version: integer()
           }
   end
 
@@ -20,6 +24,7 @@ defmodule Chalk.Query do
     defstruct error: nil,
               field: nil,
               meta: nil,
+              pkey: nil,
               ts: nil,
               value: nil
 
@@ -27,6 +32,7 @@ defmodule Chalk.Query do
             error: ChalkError.t(),
             field: String.t(),
             meta: FeatureMeta.t(),
+            pkey: String.t(),
             ts: String.t(),
             value: any()
           }
@@ -34,14 +40,20 @@ defmodule Chalk.Query do
 
   defmodule QueryMeta do
     @derive Jason.Encoder
-    defstruct execution_duration_s: nil,
-              deployment_id: nil,
+    defstruct deployment_id: nil,
+              environment_id: nil,
+              environment_name: nil,
+              execution_duration_s: nil,
+              query_hash: nil,
               query_id: nil,
               query_timestamp: nil
 
     @type t :: %__MODULE__{
-            execution_duration_s: float(),
             deployment_id: String.t(),
+            environment_id: String.t(),
+            environment_name: String.t(),
+            execution_duration_s: float(),
+            query_hash: String.t(),
             query_id: String.t(),
             query_timestamp: String.t()
           }
