@@ -29,17 +29,17 @@ defmodule Chalk.Mixfile do
 
   defp deps do
     [
-      {:tesla, "~> 1.4"},
-      {:hackney, "~> 1.18"},
-      {:poison, "~> 3.1.0"},
-      {:jason, "~> 1.1"},
       {:bypass, "~> 2.1", only: [:test]},
-      {:credo, "~> 0.5", only: [:dev], runtime: false},
-      {:excoveralls, "~> 0.14", only: [:test]},
-      {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:credo, "~> 1.6", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.2.0", only: [:dev], runtime: false},
+      {:ex_doc, ">= 0.29.1", only: [:dev], runtime: false},
+      {:excoveralls, "~> 0.16", only: [:test]},
+      {:hackney, "~> 1.18"},
+      {:jason, "~> 1.4"},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
       {:mox, "~> 1.0", only: :test},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:poison, "~> 3.1.0"},
+      {:tesla, "~> 1.4"}
     ]
   end
 
