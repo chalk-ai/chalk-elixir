@@ -33,13 +33,12 @@ defmodule Chalk.Tesla.CredentialsMiddleware do
         |> Tesla.put_headers(headers)
         |> Tesla.run(next)
 
-      {:error, %{"detail" => detail, "trace" => trace}} ->
+      {:error, error} ->
         {:current_stacktrace, stacktrace} = Process.info(self(), :current_stacktrace)
 
         {:error,
          %ChalkCredentialsError{
-           detail: detail,
-           trace: trace,
+           error: inspect(error),
            stacktrace: inspect(stacktrace)
          }}
     end
