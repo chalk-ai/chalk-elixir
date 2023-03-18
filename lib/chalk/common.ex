@@ -25,11 +25,10 @@ defmodule Chalk.Common do
 
   defmodule ChalkCredentialsError do
     @derive Jason.Encoder
-    defstruct detail: nil, trace: nil, stacktrace: nil
+    defstruct error: nil, stacktrace: nil
 
     @type t :: %__MODULE__{
-            detail: String.t(),
-            trace: String.t(),
+            error: String.t(),
             stacktrace: String.t()
           }
   end
