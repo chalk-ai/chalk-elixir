@@ -6,7 +6,7 @@ defmodule Chalk.Mixfile do
   def project do
     [
       app: :chalk_elixir,
-      version: "0.0.6",
+      version: "0.0.10",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
