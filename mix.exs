@@ -46,7 +46,6 @@ defmodule Chalk.Mixfile do
   defp package do
     [
       description: "An Elixir Library for Chalk's API",
-      name: :chalk_elixir,
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       licenses: ["Apache-2.0"],
       maintainers: ["Andrew Moreland"],
