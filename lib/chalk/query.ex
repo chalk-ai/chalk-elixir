@@ -1,14 +1,10 @@
 defmodule Chalk.Query do
-  @moduledoc false
-
   alias Chalk.Client
   alias Chalk.Client.Request
   alias Chalk.Common.ChalkError
   alias Chalk.Common.ChalkException
 
   defmodule FeatureMeta do
-    @moduledoc false
-
     @derive Jason.Encoder
     defstruct cache_hit: nil,
               chosen_resolver_fqn: nil,
@@ -24,8 +20,6 @@ defmodule Chalk.Query do
   end
 
   defmodule FeatureResult do
-    @moduledoc false
-
     @derive Jason.Encoder
     defstruct error: nil,
               field: nil,
@@ -45,8 +39,6 @@ defmodule Chalk.Query do
   end
 
   defmodule QueryMeta do
-    @moduledoc false
-
     @derive Jason.Encoder
     defstruct deployment_id: nil,
               environment_id: nil,
@@ -68,8 +60,6 @@ defmodule Chalk.Query do
   end
 
   defmodule OnlineQueryResponse do
-    @moduledoc false
-
     @derive Jason.Encoder
     defstruct data: [],
               errors: [],
@@ -87,10 +77,19 @@ defmodule Chalk.Query do
   """
   @spec online(
           %{
-            required(:inputs) => [String.t()],
+            required(:inputs) => %{
+              String.t() => String.t()
+            },
             required(:outputs) => [String.t()],
-            optional(:query_name) => String.t(),
-            optional(:deployment_id) => String.t()
+            optional(:staleness) => %{
+              String.t() => String.t()
+            },
+            optional(:context) => %{
+              optional(:environment) => String.t(),
+              optional(:tags) => [String.t()]
+            },
+            optional(:deployment_id) => String.t(),
+            optional(:query_name) => String.t()
           },
           map()
         ) :: {:ok, OnlineQueryResponse.t()} | {:error, any()}

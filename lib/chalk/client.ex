@@ -1,6 +1,4 @@
 defmodule Chalk.Client do
-  @moduledoc false
-
   @version Chalk.Mixfile.project()[:version]
 
   @spec new(map) :: Tesla.Client.t()
