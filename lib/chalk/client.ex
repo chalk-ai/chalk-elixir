@@ -43,18 +43,17 @@ defmodule Chalk.Client do
   defp get_authentication_middleware(config) do
     unauthenticated? = Map.get(config, :unauthenticated, false)
 
-    unless unauthenticated? do
+    if unauthenticated? do
+      []
+    else
       [
         {Chalk.Tesla.CredentialsMiddleware,
          %{
            client_id: get_client_id(config),
            client_secret: get_client_secret(config),
-           api_server: get_base_url(config),
-           deployment_id: get_deployment_id(config)
+           api_server: get_base_url(config)
          }}
       ]
-    else
-      []
     end
   end
 
@@ -69,15 +68,15 @@ defmodule Chalk.Client do
   end
 
   defp get_client_id(config) do
-    Map.get(config, "client_id", System.get_env("CHALK_CLIENT_ID"))
+    Map.get(config, :client_id, System.get_env("CHALK_CLIENT_ID"))
   end
 
   defp get_client_secret(config) do
-    Map.get(config, "client_secret", System.get_env("CHALK_CLIENT_SECRET"))
+    Map.get(config, :client_secret, System.get_env("CHALK_CLIENT_SECRET"))
   end
 
   defp get_deployment_id(config) do
-    Map.get(config, "deployment_id", System.get_env("DEPLOYMENT_ID"))
+    Map.get(config, :deployment_id, System.get_env("DEPLOYMENT_ID"))
   end
 
   defp get_adapter(config) do

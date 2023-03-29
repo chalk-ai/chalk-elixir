@@ -74,17 +74,39 @@ defmodule Chalk.Query do
 
   @doc """
   Execute an online query
-  Parameters
-  ```
-  %{input: }
-  ```
   """
+  @spec online(
+          %{
+            required(:inputs) => %{
+              String.t() => String.t()
+            },
+            required(:outputs) => [String.t()],
+            optional(:staleness) => %{
+              String.t() => String.t()
+            },
+            optional(:context) => %{
+              optional(:environment) => String.t(),
+              optional(:tags) => [String.t()]
+            },
+            optional(:deployment_id) => String.t(),
+            optional(:query_name) => String.t()
+          },
+          map()
+        ) :: {:ok, OnlineQueryResponse.t()} | {:error, any()}
   def online(params, config \\ %{}) do
     request_operation("v1/query/online", params, config)
   end
 
   defp request_operation(endpoint, params, config) do
     c = config[:client] || Chalk
+
+    params =
+      if deployment_id = Map.get(config, :deployment_id, System.get_env("DEPLOYMENT_ID")) do
+        # prefer the deployment_id in params, if it exists
+        Map.put_new(params, :deployment_id, deployment_id)
+      else
+        params
+      end
 
     Request
     |> struct(method: :post, endpoint: endpoint, body: params)
