@@ -68,12 +68,12 @@ defmodule Chalk.Client do
   end
 
   defp get_client_id(config) do
-    Map.get(config, :client_id) || Application.get_env(:chalk, :chalk_client_id) ||
+    Map.get(config, :client_id) || Application.get_env(:chalk, :client_id) ||
       System.get_env("CHALK_CLIENT_ID")
   end
 
   defp get_client_secret(config) do
-    Map.get(config, :client_secret) || Application.get_env(:chalk, :chalk_client_secret) ||
+    Map.get(config, :client_secret) || Application.get_env(:chalk, :client_secret) ||
       System.get_env("CHALK_CLIENT_SECRET")
   end
 
