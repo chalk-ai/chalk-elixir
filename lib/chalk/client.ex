@@ -79,7 +79,7 @@ defmodule Chalk.Client do
 
   defp get_deployment_id(config) do
     Map.get(config, :deployment_id) || Application.get_env(:chalk, :deployment_id) ||
-      System.get_env("DEPLOYMENT_ID")
+      System.get_env("CHALK_DEPLOYMENT_ID")
   end
 
   defp get_adapter(config) do
