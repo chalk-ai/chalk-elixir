@@ -1,8 +1,12 @@
 defmodule Chalk.Client.ExchangeCredentials do
+  @moduledoc false
+
   alias Chalk.Client
   alias Chalk.Client.Request
 
   defmodule Req do
+    @moduledoc false
+
     @derive Jason.Encoder
     defstruct client_id: nil, client_secret: nil, grant_type: nil
 
@@ -14,6 +18,8 @@ defmodule Chalk.Client.ExchangeCredentials do
   end
 
   defmodule Token do
+    @moduledoc false
+
     @derive Jason.Encoder
     # @enforce_keys [:access_token, :expires_in, :expires_at]
     defstruct access_token: nil,

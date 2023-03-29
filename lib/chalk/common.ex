@@ -1,5 +1,9 @@
 defmodule Chalk.Common do
+  @moduledoc false
+
   defmodule ChalkException do
+    @moduledoc false
+
     defstruct kind: nil, message: nil, stacktrace: nil
 
     @type t :: %__MODULE__{
@@ -10,6 +14,8 @@ defmodule Chalk.Common do
   end
 
   defmodule ChalkError do
+    @moduledoc false
+
     @derive Jason.Encoder
     defstruct code: nil, category: nil, message: nil, exception: nil, feature: nil, resolver: nil
 
@@ -24,6 +30,8 @@ defmodule Chalk.Common do
   end
 
   defmodule ChalkCredentialsError do
+    @moduledoc false
+
     @derive Jason.Encoder
     defstruct error: nil, stacktrace: nil
 

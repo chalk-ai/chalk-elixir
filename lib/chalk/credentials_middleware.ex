@@ -1,4 +1,6 @@
 defmodule Chalk.Tesla.CredentialsMiddleware do
+  @moduledoc false
+
   alias Chalk.Common.ChalkCredentialsError
 
   @behaviour Tesla.Middleware

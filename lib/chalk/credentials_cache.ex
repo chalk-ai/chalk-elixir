@@ -1,4 +1,6 @@
 defmodule Chalk.Client.CredentialsCache do
+  @moduledoc false
+
   use GenServer
 
   alias Chalk.Client.ExchangeCredentials.Token
