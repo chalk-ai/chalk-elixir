@@ -5,7 +5,7 @@ defmodule Chalk.Mixfile do
 
   def project do
     [
-      app: :chalk,
+      app: :chalk_elixir,
       version: "0.0.10",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -46,6 +46,7 @@ defmodule Chalk.Mixfile do
   defp package do
     [
       description: "An Elixir Library for Chalk's API",
+      name: :chalk_elixir,
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       licenses: ["Apache-2.0"],
       maintainers: ["Andrew Moreland"],
