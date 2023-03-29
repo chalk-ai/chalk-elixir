@@ -1,10 +1,14 @@
 defmodule Chalk.Query do
+  @moduledoc false
+
   alias Chalk.Client
   alias Chalk.Client.Request
   alias Chalk.Common.ChalkError
   alias Chalk.Common.ChalkException
 
   defmodule FeatureMeta do
+    @moduledoc false
+
     @derive Jason.Encoder
     defstruct cache_hit: nil,
               chosen_resolver_fqn: nil,
@@ -20,6 +24,8 @@ defmodule Chalk.Query do
   end
 
   defmodule FeatureResult do
+    @moduledoc false
+
     @derive Jason.Encoder
     defstruct error: nil,
               field: nil,
@@ -39,6 +45,8 @@ defmodule Chalk.Query do
   end
 
   defmodule QueryMeta do
+    @moduledoc false
+
     @derive Jason.Encoder
     defstruct deployment_id: nil,
               environment_id: nil,
@@ -60,6 +68,8 @@ defmodule Chalk.Query do
   end
 
   defmodule OnlineQueryResponse do
+    @moduledoc false
+
     @derive Jason.Encoder
     defstruct data: [],
               errors: [],
@@ -74,17 +84,30 @@ defmodule Chalk.Query do
 
   @doc """
   Execute an online query
-  Parameters
-  ```
-  %{input: }
-  ```
   """
+  @spec online(
+          %{
+            required(:inputs) => [String.t()],
+            required(:outputs) => [String.t()],
+            optional(:query_name) => String.t(),
+            optional(:deployment_id) => String.t()
+          },
+          map()
+        ) :: {:ok, OnlineQueryResponse.t()} | {:error, any()}
   def online(params, config \\ %{}) do
     request_operation("v1/query/online", params, config)
   end
 
   defp request_operation(endpoint, params, config) do
     c = config[:client] || Chalk
+
+    params =
+      if deployment_id = Map.get(config, :deployment_id, System.get_env("DEPLOYMENT_ID")) do
+        # prefer the deployment_id in params, if it exists
+        Map.put_new(params, :deployment_id, deployment_id)
+      else
+        params
+      end
 
     Request
     |> struct(method: :post, endpoint: endpoint, body: params)
