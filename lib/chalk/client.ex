@@ -68,19 +68,23 @@ defmodule Chalk.Client do
   end
 
   defp get_client_id(config) do
-    Map.get(config, :client_id, System.get_env("CHALK_CLIENT_ID"))
+    Map.get(config, :client_id) || Application.get_env(:chalk, :chalk_client_id) ||
+      System.get_env("CHALK_CLIENT_ID")
   end
 
   defp get_client_secret(config) do
-    Map.get(config, :client_secret, System.get_env("CHALK_CLIENT_SECRET"))
+    Map.get(config, :client_secret) || Application.get_env(:chalk, :chalk_client_secret) ||
+      System.get_env("CHALK_CLIENT_SECRET")
   end
 
   defp get_deployment_id(config) do
-    Map.get(config, :deployment_id, System.get_env("DEPLOYMENT_ID"))
+    Map.get(config, :deployment_id) || Application.get_env(:chalk, :deployment_id) ||
+      System.get_env("DEPLOYMENT_ID")
   end
 
   defp get_adapter(config) do
-    config[:adapter] || Application.get_env(:chalk, :adapter) || Tesla.Adapter.Hackney
+    Map.get(config, :adapter) || Application.get_env(:chalk, :adapter) ||
+      Tesla.Adapter.Hackney
   end
 
   defp get_http_options(config) do
