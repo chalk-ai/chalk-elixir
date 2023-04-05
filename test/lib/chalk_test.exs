@@ -81,6 +81,22 @@ defmodule ChalkTest do
                  ]
                })
     end
+
+    test "can pass credentials as an argument" do
+      assert 1 ==
+        Chalk.Query.online(%{
+          inputs: %{
+            "user.id": 1
+          },
+          outputs: [
+            "user.id",
+            "user.full_name"
+          ]
+        }, %{
+            client_id: "my-client",
+            secret: "my-secret"
+        })
+    end
   end
 
   def echo_event(event, measurements, metadata, config) do
