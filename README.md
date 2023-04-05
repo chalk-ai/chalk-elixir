@@ -30,7 +30,7 @@ Online queries are executed by calling "Chalk.Query.online" and passing inputs a
 ## Authentication
 
 The Chalk client uses authentication credentials set in the environment variables `CHALK_CLIENT_ID` and `CHALK_CLIENT_SECRET`.  
-Credentials can be generated on the Chalk dashboard or [via api](https://docs.chalk.ai/docs/online-authentication#fetching-an-access-token).
+Credentials can be generated on the Chalk dashboard or [via api](https://docs.chalk.ai/docs/online-authentication#fetching-an-access-token.
 
 The credentials can also be passed directly when invoking the client.
 
@@ -41,10 +41,9 @@ The credentials can also be passed directly when invoking the client.
         },
         outputs: [
             "user.id"
-        ],
-        context:%{
-            client_id: THE_CLIENT_ID,
-            secret: THE_SECRET
-        }
+        ]
+    }, %{    
+        client_id: THE_CLIENT_ID,
+        secret: THE_SECRET
     })
 ```
