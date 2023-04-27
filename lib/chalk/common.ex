@@ -1,5 +1,6 @@
 defmodule Chalk.Common do
   defmodule ChalkException do
+    @derive Jason.Encoder
     defstruct kind: nil, message: nil, stacktrace: nil
 
     @type t :: %__MODULE__{
