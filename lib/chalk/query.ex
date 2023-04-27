@@ -126,7 +126,11 @@ defmodule Chalk.Query do
             meta: %FeatureMeta{}
           }
         ],
-        errors: [%ChalkError{}],
+        errors: [
+          %ChalkError{
+            exception: %ChalkException{}
+          }
+        ],
         meta: %QueryMeta{}
       }
     })
