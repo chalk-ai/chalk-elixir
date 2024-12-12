@@ -15,7 +15,7 @@ defmodule Chalk.Client do
   # HELPERS
 
   defp get_base_url(config) do
-    config[:api_server] || "https://api.chalk.ai/"
+    config[:api_server] || System.get_env("CHALK_API_SERVER") || "https://api.chalk.ai/"
   end
 
   defp get_base_middleware(config) do
