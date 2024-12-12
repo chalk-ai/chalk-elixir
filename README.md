@@ -54,6 +54,7 @@ The credentials can also be passed directly when invoking the client.
 | --------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `CHALK_CLIENT_ID`          | **Required** | Your Chalk client ID. You must specify this environment variable or pass an explicit `client_id` value when constructing your ChalkClient         |
 | `CHALK_CLIENT_SECRET`      | **Required** | Your Chalk client secret. You must specify this environment variable or pass an explicit `secret` value when constructing your ChalkClient |
+| `CHALK_API_SERVER`         | Optional     | The API server that the client will communicate with. This defaults to https://api.chalk.ai which should be sufficient for most consumers. You can also pass an explicit `api_server` value when constructing your ChalkClient       |
 | `DEPLOYMENT_ID` | Optional     | The ID of the deployment. You must specify this environment variable or pass an explicit `deployment_id` value when constructing your ChalkClient                   |
 
 You can find relevant variables to use with your Chalk Client by
