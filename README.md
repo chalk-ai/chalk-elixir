@@ -53,7 +53,7 @@ The credentials can also be passed directly when invoking the client.
 | Variable                                | Kind         | Description                                                                                                                                      |
 | --------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `CHALK_CLIENT_ID`          | **Required** | Your Chalk client ID. You must specify this environment variable or pass an explicit `client_id` value when constructing your ChalkClient         |
-| `CHALK_CLIENT_SECRET`      | **Required** | Your Chalk client secret. You must specify this environment variable or pass an explicit `secret` value when constructing your ChalkClient |
+| `CHALK_CLIENT_SECRET`      | **Required** | Your Chalk client secret. You must specify this environment variable or pass an explicit `client_secret` value when constructing your ChalkClient |
 | `DEPLOYMENT_ID` | Optional     | The ID of the deployment. You must specify this environment variable or pass an explicit `deployment_id` value when constructing your ChalkClient                   |
 
 You can find relevant variables to use with your Chalk Client by
