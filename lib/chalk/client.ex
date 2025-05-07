@@ -1,5 +1,6 @@
 defmodule Chalk.Client do
   @version Chalk.Mixfile.project()[:version]
+  @base_url "https://api.chalk.ai/"
 
   @spec new(map) :: Tesla.Client.t()
   def new(config \\ %{}) do
@@ -14,8 +15,12 @@ defmodule Chalk.Client do
 
   # HELPERS
 
-  defp get_base_url(config) do
-    config[:api_server] || "https://api.chalk.ai/"
+  defp get_query_server_base_url(config) do
+    config[:query_server] || get_authentication_base_url(config)
+  end
+
+  defp get_authentication_base_url(config) do
+    config[:api_server] || @base_url
   end
 
   defp get_base_middleware(config) do
@@ -28,14 +33,22 @@ defmodule Chalk.Client do
           []
       end
 
+    deployment_type_header =
+      case get_deployment_type(config) do
+        deployment_type when not is_nil(deployment_type) ->
+          [{"x-chalk-deployment-type", deployment_type}]
+
+        _ ->
+          []
+      end
+
     [
-      {Tesla.Middleware.BaseUrl, get_base_url(config)},
+      {Tesla.Middleware.BaseUrl, get_query_server_base_url(config)},
       {Tesla.Middleware.Headers,
        [
          {"Content-Type", "application/json"},
          {"user-agent", "chalk-elixir v#{@version}"}
-         | deployment_id_header
-       ]},
+       ] ++ deployment_id_header ++ deployment_type_header},
       Tesla.Middleware.JSON
     ]
   end
@@ -51,7 +64,7 @@ defmodule Chalk.Client do
          %{
            client_id: get_client_id(config),
            client_secret: get_client_secret(config),
-           api_server: get_base_url(config)
+           api_server: get_authentication_base_url(config)
          }}
       ]
     end
@@ -77,6 +90,10 @@ defmodule Chalk.Client do
 
   defp get_deployment_id(config) do
     Map.get(config, :deployment_id, System.get_env("DEPLOYMENT_ID"))
+  end
+
+  defp get_deployment_type(config) do
+    Map.get(config, :deployment_type)
   end
 
   defp get_adapter(config) do
