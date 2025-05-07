@@ -36,7 +36,7 @@ defmodule Chalk.Client do
     deployment_type_header =
       case get_deployment_type(config) do
         deployment_type when not is_nil(deployment_type) ->
-          [{"x-chalk-deployment_type", deployment_type}]
+          [{"x-chalk-deployment-type", deployment_type}]
 
         _ ->
           []
